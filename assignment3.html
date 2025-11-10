@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mini E-Commerce Portal (Demo)</title>
+  <style>
+    :root{--accent:#076632;--muted:#cccdd1;--card:#aacedb;--bg:#f3f4f6}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:var(--bg);color:#111}
+    header{background:#fff;border-bottom:1px solid #e6e6e6}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .nav{display:flex;align-items:center;gap:16px}
+    .brand{font-weight:700;color:var(--accent)}
+    nav a{color:#374151;text-decoration:none;padding:8px 12px;border-radius:8px}
+    nav a.active, nav a:hover{background:#eef2ff;color:var(--accent)}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px;padding:18px 0}
+    .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(15,23,42,0.06)}
+    .stack{display:flex;flex-direction:column;gap:12px}
+    .form-row{display:flex;gap:8px}
+    label{font-size:13px;color:var(--muted)}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e5e7eb;font-size:14px}
+    button{background:var(--accent);color:#fff;padding:10px 14px;border:none;border-radius:8px;cursor:pointer}
+    button.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+    .small{font-size:13px;color:var(--muted)}
+    ul.list{list-style:none;padding:0;margin:0;display:flex;gap:8px}
+    ul.list li{cursor:pointer}
+    .tab-content{padding-top:12px}
+    .item{display:flex;gap:12px;align-items:center;border-bottom:1px dashed #eee;padding:12px 0}
+    .item img{width:72px;height:72px;border-radius:8px;object-fit:cover}
+    .item .meta{display:flex;flex-direction:column}
+    .badge{background:#f1f5f9;padding:6px 8px;border-radius:999px;font-size:12px;color:#0f172a}
+    .error{color:#b91c1c;font-size:13px}
+    .success{color:#065f46;font-size:13px}
+    footer{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr}.container{padding:12px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div style="flex:1;display:flex;align-items:center;gap:12px">
+        <div class="brand">G Mart</div>
+        <nav aria-label="Main navigation">
+          <a href="#home" class="nav-link active" data-link>Home</a>
+          <a href="#products" class="nav-link" data-link>Product items</a>
+          <a href="#contact" class="nav-link" data-link>Contact Us</a>
+          <a href="#about" class="nav-link" data-link>About Us</a>
+        </nav>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="open-login" class="secondary">Login</button>
+        <button id="open-register">Register</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="home" class="card" aria-labelledby="home-heading">
+      <h2 id="home-heading">Welcome to G Mart</h2>
+      <p class="small">This is a demo single-file front-end showing navigation, validation for registration/login, and UI blocks for orders, wishlist, reviews, customer care and reporting.</p>
+    </section>
+
+    <div class="grid">
+      <div>
+        <section id="products" class="card" aria-labelledby="products-heading">
+          <h3 id="products-heading">Product Items</h3>
+          <div id="products-list" class="stack"></div>
+        </section>
+
+        <section id="reviews" class="card" style="margin-top:16px" aria-labelledby="reviews-heading">
+          <h3 id="reviews-heading">Comments & Reviews</h3>
+          <div id="reviews-list"></div>
+          <form id="review-form" class="stack" style="margin-top:8px">
+            <label for="review-author">Your name</label>
+            <input id="review-author" required placeholder="Name" />
+            <label for="review-text">Review</label>
+            <textarea id="review-text" rows="3" placeholder="Write a short review..." required></textarea>
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="small">Rating:</label>
+              <select id="review-rating">
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - OK</option>
+                <option value="2">2 - Poor</option>
+                <option value="1">1 - Bad</option>
+              </select>
+              <button type="submit">Post Review</button>
+            </div>
+            <div id="review-msg" class="small"></div>
+          </form>
+        </section>
+
+        <section id="reporting" class="card" style="margin-top:16px" aria-labelledby="reporting-heading">
+          <h3 id="reporting-heading">Reporting Options</h3>
+          <p class="small">Report an issue with a product or a seller.</p>
+          <form id="report-form" class="stack">
+            <label for="report-item">Select Item</label>
+            <select id="report-item"></select>
+            <label for="report-reason">Reason</label>
+            <textarea id="report-reason" rows="3" placeholder="Describe the issue..." required></textarea>
+            <button type="submit">Submit Report</button>
+            <div id="report-msg" class="small"></div>
+          </form>
+        </section>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h4>Account Actions</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <button id="view-orders" class="secondary">View Orders</button>
+            <button id="view-wishlist" class="secondary">View Wishlist</button>
+            <button id="contact-care" class="secondary">Customer Care</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h4>Orders / Wishlist</h4>
+          <ul class="list" role="tablist" style="margin-top:8px">
+            <li><button class="small" id="tab-orders">Orders</button></li>
+            <li><button class="small" id="tab-wishlist">Wishlist</button></li>
+          </ul>
+          <div id="tab-content" class="tab-content"></div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h4>Customer Care</h4>
+          <form id="care-form" class="stack">
+            <label for="care-name">Name</label>
+            <input id="care-name" required />
+            <label for="care-email">Email</label>
+            <input id="care-email" required />
+            <label for="care-message">Message</label>
+            <textarea id="care-message" rows="3" required></textarea>
+            <button type="submit">Send</button>
+            <div id="care-msg" class="small"></div>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    Built for demo — includes client-side validation and sample data. Not production-ready.
+  </footer>
+
+  <!-- Hidden modals for register/login -->
+  <div id="modal-backdrop" style="position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:40">
+    <div id="modal" style="width:100%;max-width:720px">
+      <div class="card" id="auth-card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 id="auth-title">Register</h3>
+          <button id="close-modal" class="secondary">Close</button>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div style="flex:1">
+            <form id="register-form" class="stack">
+              <label for="reg-name">Full Name</label>
+              <input id="reg-name" placeholder="e.g. Priya Sharma" required />
+
+              <label for="reg-email">Email</label>
+              <input id="reg-email" type="email" placeholder="name@example.com" required />
+
+              <label for="reg-phone">Phone</label>
+              <input id="reg-phone" placeholder="10-digit phone" required />
+
+              <label for="reg-password">Password</label>
+              <input id="reg-password" type="password" placeholder="At least 8 chars, 1 letter & 1 digit" required />
+
+              <label for="reg-password2">Confirm Password</label>
+              <input id="reg-password2" type="password" required />
+
+              <button type="submit">Create account</button>
+              <div id="reg-msg" class="small"></div>
+            </form>
+          </div>
+          <div style="width:320px">
+            <h4>Or Login</h4>
+            <form id="login-form" class="stack">
+              <label for="login-email">Email</label>
+              <input id="login-email" type="email" required />
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" required />
+              <button type="submit">Login</button>
+              <div id="login-msg" class="small"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Sample data ----------
+    const sampleProducts = [
+      {id:'p1',title:'Wireless Headphones',price:1299, img:'https://www.leafstudios.in/cdn/shop/files/1_a43c5e0b-3a47-497d-acec-b4764259b10e_1024x1024.png?v=1750486829'},
+      {id:'p2',title:'Smart Watch',price:3499, img:'https://hammeronline.in/cdn/shop/files/Hammerfit.webp?v=1694859121'},
+      {id:'p3',title:'iphone',price:90499, img:'https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/Communication/Mobiles/Images/309699_0_dr7vjz.png'},
+      {id:'p3',title:'laptop',price:50499, img:'https://cdn.uc.assets.prezly.com/5b79cc3a-6778-4bc7-a620-346a387dc95d/-/format/auto/aspire-vero_16-03.jpg'}
+    ];
+
+    let reviews = [
+      {name:'Asha',text:'Great product, fast delivery',rating:5,date:'2025-11-01'},
+      {name:'Rohit',text:'Value for money',rating:4,date:'2025-10-18'}
+    ];
+
+    let orders = [
+      {id:'o1001',item:sampleProducts[0],status:'Delivered',date:'2025-10-22'},
+      {id:'o1002',item:sampleProducts[2],status:'Shipped',date:'2025-11-03'}
+    ];
+
+    let wishlist = [sampleProducts[1]];
+
+    // ---------- Helpers ----------
+    const $ = q => document.querySelector(q);
+    const $$ = q => Array.from(document.querySelectorAll(q));
+
+    function renderProducts(){
+      const el = $('#products-list'); el.innerHTML='';
+      sampleProducts.forEach(p=>{
+        const div = document.createElement('div'); div.className='item';
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.title}"/>
+          <div class="meta">
+            <strong>${p.title}</strong>
+            <span class="small">₹${p.price}</span>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <button data-add="${p.id}">Add to Wishlist</button>
+              <button data-report="${p.id}" class="secondary">Report</button>
+            </div>
+          </div>
+        `;
+        el.appendChild(div);
+      });
+      // populate report select
+      const reportSelect = $('#report-item'); reportSelect.innerHTML='';
+      sampleProducts.forEach(p=> reportSelect.insertAdjacentHTML('beforeend', `<option value="${p.id}">${p.title}</option>`));
+    }
+
+    function renderReviews(){
+      const el = $('#reviews-list'); el.innerHTML='';
+      reviews.slice().reverse().forEach(r=>{
+        const div = document.createElement('div'); div.className='item';
+        div.innerHTML=`<div style="flex:1"><strong>${r.name}</strong> <span class="small">(${r.date})</span><div class="small">Rating: ${r.rating}/5</div><p>${r.text}</p></div>`;
+        el.appendChild(div);
+      });
+    }
+
+    function renderTabContent(type){
+      const el = $('#tab-content'); el.innerHTML='';
+      if(type==='orders'){
+        if(!orders.length) el.innerHTML='<div class="small">No orders yet.</div>';
+        orders.forEach(o=>{
+          const d = document.createElement('div'); d.className='item';
+          d.innerHTML = `<img src="${o.item.img}" alt="${o.item.title}"/><div class="meta"><strong>${o.item.title}</strong><span class="small">Order: ${o.id}</span><span class="small">Status: ${o.status}</span></div>`;
+          el.appendChild(d);
+        });
+      } else {
+        if(!wishlist.length) el.innerHTML='<div class="small">Wishlist empty.</div>';
+        wishlist.forEach(p=>{
+          const d = document.createElement('div'); d.className='item';
+          d.innerHTML = `<img src="${p.img}" alt="${p.title}"/><div class="meta"><strong>${p.title}</strong><span class="small">₹${p.price}</span></div>`;
+          el.appendChild(d);
+        });
+      }
+    }
+
+    // ---------- Navigation ----------
+    $$('[data-link]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault(); $$('[data-link]').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    // ---------- Modal controls ----------
+    const backdrop = $('#modal-backdrop'), modal = $('#modal'), authTitle = $('#auth-title');
+    $('#open-register').addEventListener('click',()=>{showModal('register')});
+    $('#open-login').addEventListener('click',()=>{showModal('login')});
+    $('#close-modal').addEventListener('click',()=>{hideModal()});
+    backdrop.addEventListener('click',e=>{ if(e.target===backdrop) hideModal(); });
+
+    function showModal(mode='register'){
+      backdrop.style.display='flex';
+      authTitle.textContent = mode==='register' ? 'Register' : 'Login';
+    }
+    function hideModal(){ backdrop.style.display='none'; $('#reg-msg').textContent=''; $('#login-msg').textContent=''; }
+
+    // ---------- Validation & Auth (client-side demo) ----------
+    // store users in localStorage for demo
+    function loadUsers(){ try{ return JSON.parse(localStorage.getItem('demo_users')||'[]'); }catch(e){return[]} }
+    function saveUsers(u){ localStorage.setItem('demo_users',JSON.stringify(u)); }
+
+    // basic validators
+    const validators = {
+      email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+      phone: v => /^\d{10}$/.test(v),
+      password: v => /^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(v)
+    };
+
+    $('#register-form').addEventListener('submit',e=>{
+      e.preventDefault();
+      const name = $('#reg-name').value.trim();
+      const email = $('#reg-email').value.trim().toLowerCase();
+      const phone = $('#reg-phone').value.trim();
+      const pw = $('#reg-password').value;
+      const pw2 = $('#reg-password2').value;
+      const msg = $('#reg-msg'); msg.textContent=''; msg.className='small';
+
+      if(!name){ msg.textContent='Name is required'; msg.className='error'; return; }
+      if(!validators.email(email)){ msg.textContent='Enter valid email'; msg.className='error'; return; }
+      if(!validators.phone(phone)){ msg.textContent='Enter valid 10-digit phone number'; msg.className='error'; return; }
+      if(!validators.password(pw)){ msg.textContent='Password must be 8+ chars and include a digit'; msg.className='error'; return; }
+      if(pw!==pw2){ msg.textContent='Passwords do not match'; msg.className='error'; return; }
+
+      const users = loadUsers();
+      if(users.some(u=>u.email===email)){ msg.textContent='An account with this email already exists'; msg.className='error'; return; }
+
+      users.push({name,email,phone,password:pw});
+      saveUsers(users);
+      msg.textContent='Account created. You can login now.'; msg.className='success';
+      $('#register-form').reset();
+    });
+
+    $('#login-form').addEventListener('submit',e=>{
+      e.preventDefault();
+      const email = $('#login-email').value.trim().toLowerCase();
+      const pw = $('#login-password').value;
+      const msg = $('#login-msg'); msg.textContent=''; msg.className='small';
+      const users = loadUsers();
+      const u = users.find(x=>x.email===email && x.password===pw);
+      if(!u){ msg.textContent='Invalid credentials'; msg.className='error'; return; }
+      msg.textContent = 'Logged in as ' + u.name;
+      msg.className='success';
+      // close modal after a short delay for demo
+      setTimeout(()=>{ hideModal(); alert('Welcome, '+u.name+' (demo)'); },600);
+    });
+
+    // ---------- Review posting ----------
+    $('#review-form').addEventListener('submit',e=>{
+      e.preventDefault();
+      const name = $('#review-author').value.trim();
+      const text = $('#review-text').value.trim();
+      const rating = parseInt($('#review-rating').value,10);
+      const msg = $('#review-msg'); msg.textContent='';
+      if(!name||!text){ msg.textContent='Fill name and review'; msg.className='error'; return; }
+      reviews.push({name,text,rating,date:new Date().toISOString().slice(0,10)});
+      $('#review-form').reset(); renderReviews(); msg.textContent='Review posted'; msg.className='success';
+      setTimeout(()=>msg.textContent='',2000);
+    });
+
+    // ---------- Reporting ----------
+    $('#report-form').addEventListener('submit',e=>{
+      e.preventDefault();
+      const itemId = $('#report-item').value; const reason = $('#report-reason').value.trim();
+      const msg = $('#report-msg'); msg.textContent='';
+      if(!reason){ msg.textContent='Please describe the issue'; msg.className='error'; return; }
+      // For demo: just echo
+      msg.textContent = `Report submitted for ${itemId} — we will review it.`; msg.className='success';
+      $('#report-form').reset();
+    });
+
+    // ---------- Customer care ----------
+    $('#care-form').addEventListener('submit',e=>{
+      e.preventDefault();
+      const name = $('#care-name').value.trim(); const email = $('#care-email').value.trim(); const message = $('#care-message').value.trim();
+      const msg = $('#care-msg'); msg.textContent='';
+      if(!name || !validators.email(email) || !message){ msg.textContent='Please fill all fields correctly'; msg.className='error'; return; }
+      msg.textContent = 'Message sent. Our customer care team will contact you at ' + email;
+      msg.className='success';
+      $('#care-form').reset();
+    });
+
+    // ---------- View orders/wishlist ----------
+    $('#tab-orders').addEventListener('click',()=>renderTabContent('orders'));
+    $('#tab-wishlist').addEventListener('click',()=>renderTabContent('wishlist'));
+    $('#view-orders').addEventListener('click',()=>renderTabContent('orders'));
+    $('#view-wishlist').addEventListener('click',()=>renderTabContent('wishlist'));
+
+    // Add to wishlist & report buttons
+    document.body.addEventListener('click',e=>{
+      if(e.target.dataset.add){
+        const id = e.target.dataset.add; const p = sampleProducts.find(x=>x.id===id);
+        if(!wishlist.some(x=>x.id===id)){ wishlist.push(p); alert(p.title + ' added to wishlist'); }
+        else alert('Already in wishlist');
+      }
+      if(e.target.dataset.report){
+        const id = e.target.dataset.report; $('#report-item').value = id; document.getElementById('report-reason').focus();
+      }
+    });
+
+    // ---------- Initial render ----------
+    (function init(){ renderProducts(); renderReviews(); renderTabContent('orders'); })();
+  </script>
+</body>
+</html>
